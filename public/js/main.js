@@ -16,11 +16,21 @@ const setMenuState = (isActive) => {
         navLinks.style.transform = '';
         navLinks.style.opacity = '';
         navLinks.style.visibility = '';
+        navLinks.style.pointerEvents = '';
         return;
     }
-    navLinks.style.transform = isActive ? 'translateX(0)' : 'translateX(100%)';
-    navLinks.style.opacity = isActive ? '1' : '0';
-    navLinks.style.visibility = isActive ? 'visible' : 'hidden';
+    // Let CSS handle transitions — only set inline styles when explicitly toggling
+    if (isActive) {
+        navLinks.style.transform = 'translateY(0)';
+        navLinks.style.opacity = '1';
+        navLinks.style.visibility = 'visible';
+        navLinks.style.pointerEvents = 'auto';
+    } else {
+        navLinks.style.transform = '';
+        navLinks.style.opacity = '';
+        navLinks.style.visibility = '';
+        navLinks.style.pointerEvents = '';
+    }
 };
 
 const setHamburgerState = (isActive) => {
@@ -633,5 +643,123 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.05 });
 
     observer.observe(stage.closest('.balloon-sky') || stage);
+})();
+
+/* ===== Instagram Carousel ===== */
+(function() {
+    const track = document.querySelector('.ig-carousel-track');
+    if (!track) return;
+    const container = track.parentElement;
+    const cards = track.querySelectorAll('.ig-post-card');
+    const prevBtn = document.querySelector('.ig-prev');
+    const nextBtn = document.querySelector('.ig-next');
+    const dotsContainer = document.querySelector('.ig-carousel-dots');
+    let currentIndex = 0;
+    let cardsPerView = 3;
+    let isDragging = false, startX = 0, scrollStart = 0;
+
+    function getCardsPerView() {
+        const w = window.innerWidth;
+        if (w <= 600) return 1;
+        if (w <= 900) return 2;
+        return 3;
+    }
+
+    function getCardWidth() {
+        if (!cards.length) return 0;
+        const style = getComputedStyle(track);
+        const gap = parseFloat(style.gap) || 20;
+        return cards[0].offsetWidth + gap;
+    }
+
+    function maxIndex() {
+        return Math.max(0, cards.length - cardsPerView);
+    }
+
+    function buildDots() {
+        dotsContainer.innerHTML = '';
+        const total = maxIndex() + 1;
+        for (let i = 0; i < total; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'ig-dot' + (i === currentIndex ? ' active' : '');
+            dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function goTo(index) {
+        currentIndex = Math.max(0, Math.min(index, maxIndex()));
+        track.style.transform = 'translateX(-' + (currentIndex * getCardWidth()) + 'px)';
+        updateButtons();
+        updateDots();
+    }
+
+    function updateButtons() {
+        if (prevBtn) prevBtn.disabled = currentIndex === 0;
+        if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex();
+    }
+
+    function updateDots() {
+        dotsContainer.querySelectorAll('.ig-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === currentIndex);
+        });
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+    // Drag/swipe support
+    function onPointerDown(e) {
+        isDragging = true;
+        startX = e.touches ? e.touches[0].clientX : e.clientX;
+        scrollStart = currentIndex * getCardWidth();
+        track.classList.add('grabbing');
+    }
+    function onPointerMove(e) {
+        if (!isDragging) return;
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const diff = startX - x;
+        track.style.transform = 'translateX(-' + (scrollStart + diff) + 'px)';
+    }
+    function onPointerUp(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        track.classList.remove('grabbing');
+        const x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+        const diff = startX - x;
+        const threshold = getCardWidth() * 0.25;
+        if (diff > threshold) goTo(currentIndex + 1);
+        else if (diff < -threshold) goTo(currentIndex - 1);
+        else goTo(currentIndex);
+    }
+
+    track.addEventListener('mousedown', onPointerDown);
+    track.addEventListener('mousemove', onPointerMove);
+    track.addEventListener('mouseup', onPointerUp);
+    track.addEventListener('mouseleave', onPointerUp);
+    track.addEventListener('touchstart', onPointerDown, { passive: true });
+    track.addEventListener('touchmove', onPointerMove, { passive: true });
+    track.addEventListener('touchend', onPointerUp);
+
+    // Click on card opens Instagram post
+    cards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (isDragging) return;
+            const sc = this.dataset.shortcode;
+            if (sc) window.open('https://www.instagram.com/p/' + sc + '/', '_blank', 'noopener');
+        });
+        card.style.cursor = 'pointer';
+    });
+
+    function onResize() {
+        cardsPerView = getCardsPerView();
+        if (currentIndex > maxIndex()) currentIndex = maxIndex();
+        buildDots();
+        goTo(currentIndex);
+    }
+
+    window.addEventListener('resize', onResize);
+    onResize();
 })();
 

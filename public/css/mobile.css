@@ -17,55 +17,94 @@
     .nav-container { padding: 0 1rem !important }
     .logo-image { height: 36px !important }
 
-    /* MOBILE MENU */
+    /* MOBILE MENU — Premium full-screen overlay */
     .nav-links {
-        display: none;
+        display: flex !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
-        background: rgba(255,251,247,.98) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
-        backdrop-filter: blur(20px) !important;
+        background: linear-gradient(160deg, rgba(255,251,247,.97) 0%, rgba(255,240,248,.97) 100%) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        backdrop-filter: blur(24px) !important;
         flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
-        gap: 8px !important;
-        padding: 80px 2rem 2rem !important;
+        gap: 0 !important;
+        padding: 100px 2.5rem 80px !important;
         z-index: 999 !important;
-        transform: translateX(100%) !important;
-        transition: transform 0.3s ease, opacity 0.3s ease !important;
+        transform: translateY(-100%) !important;
+        transition: transform 0.45s cubic-bezier(.4,0,.2,1), opacity 0.35s ease !important;
         opacity: 0 !important;
         visibility: hidden !important;
+        pointer-events: none !important;
     }
     .nav-links.active {
-        display: flex !important;
-        transform: translateX(0) !important;
+        transform: translateY(0) !important;
         opacity: 1 !important;
         visibility: visible !important;
+        pointer-events: auto !important;
     }
+
+    /* Menu link items — staggered entry */
+    .nav-links li {
+        list-style: none !important;
+        width: 100% !important;
+        max-width: 320px !important;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .nav-links.active li {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .nav-links.active li:nth-child(1) { transition-delay: .08s }
+    .nav-links.active li:nth-child(2) { transition-delay: .14s }
+    .nav-links.active li:nth-child(3) { transition-delay: .20s }
+    .nav-links.active li:nth-child(4) { transition-delay: .26s }
+    .nav-links.active li:nth-child(5) { transition-delay: .32s }
+
     .nav-links a {
-        font-size: 1.2rem !important;
-        padding: 1rem 2rem !important;
+        font-family: var(--font-heading) !important;
+        font-size: 1.5rem !important;
+        font-weight: 600 !important;
+        color: var(--text-primary) !important;
+        padding: 16px 24px !important;
         width: 100% !important;
         text-align: center !important;
-        border-radius: 12px !important;
+        border-radius: 16px !important;
+        display: block !important;
+        text-decoration: none !important;
+        transition: background 0.25s, color 0.25s, transform 0.25s !important;
+        letter-spacing: .02em !important;
     }
-    .nav-links a:hover, .nav-links a.active {
-        background: var(--pink-pale) !important;
+    .nav-links a:hover,
+    .nav-links a:active {
+        background: rgba(233,30,140,.08) !important;
         color: var(--pink) !important;
+        transform: scale(1.03) !important;
     }
+
+    /* CTA section inside open menu */
     .nav-cta { gap: 0.75rem !important }
     .nav-cta .phone-link span { display: none !important }
     .nav-cta .btn-primary { padding: 0.6rem 1.2rem !important; font-size: 0.85rem !important }
-    .mobile-menu-toggle { display: flex !important }
+
+    /* Hamburger button */
+    .mobile-menu-toggle {
+        display: flex !important;
+        position: relative !important;
+        z-index: 1001 !important;
+    }
+
     body.menu-open { overflow: hidden !important }
 
     /* HERO */
     .hero {
         min-height: auto !important;
-        padding: 120px 0 60px !important;
+        padding: 80px 0 48px !important;
     }
     .hero-balloons { display: none !important }
     .hero-badge-top { font-size: 0.75rem !important; padding: 8px 16px !important; margin-bottom: 1.5rem !important }
@@ -91,7 +130,22 @@
     .about-grid { grid-template-columns: 1fr !important; gap: 2rem !important }
     .about-content h2 { font-size: 1.8rem !important }
     .about-content p { font-size: 1rem !important }
-    .about-features { grid-template-columns: 1fr !important; gap: 0.75rem !important }
+    /* ABOUT FEATURES — compact 2×2 chip grid */
+    .about-features { grid-template-columns: 1fr 1fr !important; gap: 10px !important; margin-top: 1.25rem !important }
+    .about-feature {
+        background: rgba(233,30,140,.04) !important;
+        border: 1px solid rgba(233,30,140,.1) !important;
+        border-radius: 12px !important;
+        padding: 10px 12px !important;
+        gap: 8px !important;
+        font-size: .82rem !important;
+    }
+    .about-feature .feature-icon {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: .9rem !important;
+        border-radius: 8px !important;
+    }
     .about-images { grid-template-columns: 1fr !important }
     .about-images img { height: 200px !important }
     .about-images img:nth-child(2) { margin-top: 0 !important }
@@ -218,4 +272,24 @@
     .trust-value { font-size: 1.2rem !important }
 
     .section-label { font-size: 0.7rem !important; padding: 6px 14px !important }
+
+    /* IG carousel small phone */
+    .ig-post-card { flex: 0 0 85% !important }
+}
+
+/* IG CAROUSEL MOBILE */
+@media (max-width: 768px) {
+    .ig-section { padding: 3rem 0 }
+    .ig-section-header h2 { font-size: 1.6rem }
+    .ig-post-card { flex: 0 0 calc(80% - 10px) }
+    .ig-carousel-track { gap: 14px }
+    .ig-carousel-btn { width: 34px; height: 34px }
+    .ig-prev { left: -6px }
+    .ig-next { right: -6px }
+    .ig-follow-btn { padding: 12px 24px; font-size: .85rem }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .ig-post-card { flex: 0 0 calc(50% - 10px) }
+}
 }
