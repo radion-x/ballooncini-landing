@@ -247,10 +247,10 @@ document.querySelectorAll('.service-link').forEach(link => {
     });
 });
 
-// Console welcome message (optional, for developers)
+// Console welcome message
 console.log(
-    '%c✨ Websited Digital Marketing',
-    'color: #C4EF17; font-size: 16px; font-weight: bold;'
+    '%c🎈 Ballooncini — Extraordinary Balloon Decorations Since 1997',
+    'color: #E91E8C; font-size: 14px; font-weight: bold;'
 );
 
 // Handle form input animations
@@ -352,4 +352,286 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// ===== SCROLL REVEAL ANIMATIONS =====
+document.addEventListener('DOMContentLoaded', () => {
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal, .service-card, .transformation-card, .step-card, .info-item, .pricing-card, .requirements-card, .faq-item').forEach(el => {
+        el.classList.add('reveal');
+        revealObserver.observe(el);
+    });
+});
+
+// ===== REVIEWS SECTION ANIMATIONS =====
+document.addEventListener('DOMContentLoaded', () => {
+    const testimonialsSection = document.getElementById('testimonials');
+    if (testimonialsSection) {
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    sectionObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        sectionObserver.observe(testimonialsSection);
+    }
+});
+
+// ===== REVIEWS SWIPER CAROUSEL =====
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof Swiper === 'undefined') return;
+
+    const reviewsSwiper = new Swiper('.reviews-swiper', {
+        // Core settings
+        slidesPerView: 'auto',
+        centeredSlides: true,
+        spaceBetween: 24,
+        speed: 800,
+        grabCursor: true,
+        loop: true,
+        watchSlidesProgress: true,
+
+        // Silky smooth autoplay
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
+
+        // Pagination dots
+        pagination: {
+            el: '.reviews-pagination',
+            clickable: true,
+        },
+
+        // Responsive breakpoints
+        breakpoints: {
+            0: {
+                slidesPerView: 1.15,
+                spaceBetween: 16,
+                centeredSlides: true,
+            },
+            480: {
+                slidesPerView: 1.4,
+                spaceBetween: 20,
+                centeredSlides: true,
+            },
+            768: {
+                slidesPerView: 2.2,
+                spaceBetween: 24,
+                centeredSlides: true,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 28,
+                centeredSlides: true,
+            },
+            1400: {
+                slidesPerView: 3.5,
+                spaceBetween: 32,
+                centeredSlides: true,
+            },
+        },
+
+        // Smooth easing
+        on: {
+            init: function() {
+                this.el.style.opacity = '1';
+            },
+        },
+    });
+
+    // Custom prev/next buttons
+    const prevBtn = document.getElementById('reviewsPrev');
+    const nextBtn = document.getElementById('reviewsNext');
+    if (prevBtn) prevBtn.addEventListener('click', () => reviewsSwiper.slidePrev());
+    if (nextBtn) nextBtn.addEventListener('click', () => reviewsSwiper.slideNext());
+});
+
+/* ============================================================
+   FLOATING BALLOON SKY — Suburb Service Areas
+   Each suburb floats upward as a colourful balloon with
+   gentle physics: wobble, drift, rotation, parallax depth.
+   ============================================================ */
+(function () {
+    const stage = document.getElementById('balloonStage');
+    if (!stage) return;
+
+    const SUBURBS = [
+        'Haberfield','Leichhardt','Ashfield','Five Dock','Drummoyne','Burwood',
+        'Strathfield','Concord','Homebush','Sydney CBD','North Sydney','Parramatta',
+        'Chatswood','Bondi','Randwick','Marrickville','Newtown','Balmain',
+        'Rozelle','Petersham','Summer Hill','Croydon','Annandale','Glebe',
+        'Surry Hills','Paddington','Woollahra','Mosman','Neutral Bay','Cremorne',
+        'Manly','Dee Why','Coogee','Maroubra','Mascot','Botany',
+        'Rockdale','Hurstville','Kogarah','Sans Souci','Cronulla','Miranda',
+        'Sutherland','Liverpool','Bankstown','Campbelltown','Penrith','Blacktown',
+        'Castle Hill','Hornsby','Ryde','Epping','Eastwood','Gladesville',
+        'Hunters Hill','Lane Cove','Willoughby','Gordon','Turramurra','Wahroonga',
+        'Rose Bay','Double Bay','Vaucluse','Bronte','Waverley','Enmore',
+        'Stanmore','Dulwich Hill','Canterbury','Campsie','Belmore','Auburn',
+        'Granville','Merrylands','Fairfield','Bella Vista','Carlingford','Beecroft',
+        'West Ryde','Meadowbank','Rhodes','Wentworth Point','Olympic Park'
+    ];
+
+    const COLOR_COUNT = 10;
+    const isMobile = window.innerWidth < 768;
+    const MAX_BALLOONS = isMobile ? 16 : 28;
+    const SPAWN_INTERVAL = isMobile ? 800 : 480;
+    const PRE_FILL = isMobile ? 10 : 18;
+
+    let balloons = [];
+    let animId = null;
+    let running = false;
+    let lastSpawn = 0;
+    let suburbIdx = 0;
+    let time = 0;
+
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+
+    // Insert soft hyphen at midpoint of long single words so they break with a dash
+    function hyphenate(str) {
+        return str.split(' ').map(function(word) {
+            if (word.length > 6) {
+                var mid = Math.ceil(word.length / 2);
+                return word.slice(0, mid) + '\u00AD' + word.slice(mid);
+            }
+            return word;
+        }).join(' ');
+    }
+
+    function createBalloon(now, prefillY) {
+        const name = SUBURBS[suburbIdx % SUBURBS.length];
+        suburbIdx++;
+
+        const depth = rand(0.55, 1);
+        const size = Math.round(52 + depth * 30);
+        const stringLen = Math.round(30 + depth * 35);
+        const colorIdx = Math.floor(rand(0, COLOR_COUNT));
+
+        const el = document.createElement('div');
+        el.className = 'suburb-balloon balloon-c' + colorIdx;
+        el.style.setProperty('--bsize', size + 'px');
+        el.style.setProperty('--slen', stringLen + 'px');
+        el.style.setProperty('--swaveDur', rand(2.5, 4).toFixed(1) + 's');
+        el.style.opacity = '0';
+
+        el.innerHTML =
+            '<div class="balloon-body"><span class="balloon-text">' + hyphenate(name) + '</span></div>' +
+            '<div class="balloon-string"></div>';
+
+        stage.appendChild(el);
+
+        const stageW = stage.offsetWidth;
+        const stageH = stage.offsetHeight;
+
+        const b = {
+            el: el,
+            x: rand(size, stageW - size),
+            y: (prefillY !== undefined) ? prefillY : stageH + size + stringLen,
+            speed: rand(0.3, 0.7) * depth,
+            wobbleAmp: rand(12, 35),
+            wobbleFreq: rand(0.3, 0.7),
+            wobblePhase: rand(0, Math.PI * 2),
+            rotAmp: rand(2, 6),
+            rotFreq: rand(0.2, 0.45),
+            rotPhase: rand(0, Math.PI * 2),
+            depth: depth,
+            born: now,
+            totalH: size * 1.2 + stringLen + 8,
+        };
+
+        balloons.push(b);
+    }
+
+    // Pre-fill the stage so it's not empty on first view
+    function seedBalloons() {
+        var stageH = stage.offsetHeight || 650;
+        for (var i = 0; i < PRE_FILL; i++) {
+            createBalloon(0, rand(40, stageH - 40));
+        }
+    }
+
+    function tick(ts) {
+        if (!running) return;
+        const dt = 16; // ~60fps normalised
+        time += 0.016;
+
+        // Spawn new balloons
+        if (ts - lastSpawn > SPAWN_INTERVAL && balloons.length < MAX_BALLOONS) {
+            createBalloon(ts);
+            lastSpawn = ts;
+        }
+
+        const stageH = stage.offsetHeight;
+        const fadeInZone = stageH * 0.85;
+        const fadeOutZone = stageH * 0.15;
+
+        for (let i = balloons.length - 1; i >= 0; i--) {
+            const b = balloons[i];
+
+            // Float upward
+            b.y -= b.speed;
+
+            // Wobble
+            const wobbleX = Math.sin(time * b.wobbleFreq + b.wobblePhase) * b.wobbleAmp;
+            const rot = Math.sin(time * b.rotFreq + b.rotPhase) * b.rotAmp;
+
+            // Opacity based on position
+            let opacity = 1;
+            if (b.y > fadeInZone) {
+                opacity = Math.max(0, 1 - (b.y - fadeInZone) / (stageH * 0.15));
+            } else if (b.y < fadeOutZone) {
+                opacity = Math.max(0, b.y / fadeOutZone);
+            }
+            opacity *= (0.5 + b.depth * 0.5);
+
+            b.el.style.transform = 'translate3d(' + (b.x + wobbleX) + 'px,' + b.y + 'px,0) rotate(' + rot + 'deg)';
+            b.el.style.opacity = opacity;
+            b.el.style.zIndex = Math.round(b.depth * 10);
+
+            // Remove when off-screen top
+            if (b.y < -b.totalH) {
+                b.el.remove();
+                balloons.splice(i, 1);
+            }
+        }
+
+        animId = requestAnimationFrame(tick);
+    }
+
+    function startAnimation() {
+        if (running) return;
+        running = true;
+        if (balloons.length === 0) seedBalloons();
+        lastSpawn = 0;
+        animId = requestAnimationFrame(tick);
+    }
+
+    function stopAnimation() {
+        running = false;
+        if (animId) cancelAnimationFrame(animId);
+    }
+
+    // Only animate when section is in viewport
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                startAnimation();
+            } else {
+                stopAnimation();
+            }
+        });
+    }, { threshold: 0.05 });
+
+    observer.observe(stage.closest('.balloon-sky') || stage);
+})();
 

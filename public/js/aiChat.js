@@ -75,7 +75,7 @@ class AIChat {
         await this.loadConfig();
 
         // Add welcome message
-        this.addMessage('ai', 'Hello! 👋 Welcome to Elite Dentistry. I\'m here to help you with Invisalign information, pricing, and booking your free consultation. How can I assist you today?');
+        this.addMessage('ai', 'Hello! 🎈 Welcome to Ballooncini! I\'m here to help you with balloon decoration services, event planning ideas, and getting a quote. How can I help make your event unforgettable?');
 
         // Add suggested questions if available
         if (this.suggestedQuestions.length > 0 && !this.hasShownSuggestions) {
@@ -181,7 +181,7 @@ class AIChat {
         this.streamingMessageDiv = null;
         
         // Add welcome message back
-        this.addMessage('ai', 'Hello! 👋 Welcome to Elite Dentistry. I\'m here to help you with Invisalign information, pricing, and booking your free consultation. How can I assist you today?');
+        this.addMessage('ai', 'Hello! 🎈 Welcome to Ballooncini! I\'m here to help you with balloon decoration services, event planning ideas, and getting a quote. How can I help make your event unforgettable?');
         
         // Show suggested questions again
         if (this.suggestedQuestions.length > 0) {

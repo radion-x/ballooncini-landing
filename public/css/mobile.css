@@ -1,978 +1,221 @@
 /* ============================================
-   ELITE DENTISTRY - MOBILE STYLES
-   Clean, Professional Mobile Experience
+   BALLOONCINI — MOBILE STYLES
+   Joyful, Premium Mobile Experience
    ============================================ */
 
 @media (max-width: 768px) {
-    /* ============================================
-       CRITICAL: PREVENT HORIZONTAL SCROLL
-       ============================================ */
-    html {
-        overflow-x: hidden !important;
-    }
-    
-    body {
-        overflow-x: hidden !important;
-        width: 100% !important;
-        max-width: 100vw !important;
-        position: relative !important;
-    }
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box !important;
-    }
+    /* PREVENT HORIZONTAL SCROLL */
+    html { overflow-x: hidden !important }
+    body { overflow-x: hidden !important; width: 100% !important; max-width: 100vw !important; position: relative !important }
+    *, *::before, *::after { box-sizing: border-box !important }
+    .container { padding: 0 1rem !important; max-width: 100% !important; width: 100% !important; overflow-x: hidden !important }
 
-    .container {
-        padding: 0 1rem !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        overflow-x: hidden !important;
-    }
+    /* HEADER */
+    header { padding: 0 !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important }
+    nav { padding: 0.5rem 0 !important }
+    .nav-container { padding: 0 1rem !important }
+    .logo-image { height: 36px !important }
 
-    /* ============================================
-       MOBILE HEADER & NAVIGATION
-       ============================================ */
-    header {
-        padding: 0 !important;
+    /* MOBILE MENU */
+    .nav-links {
+        display: none;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 1000 !important;
-    }
-
-    nav {
-        padding: 0.5rem 0 !important;
-    }
-
-    .nav-container {
-        padding: 0 1rem !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        width: 100% !important;
-    }
-
-    .logo {
-        flex-shrink: 0 !important;
-    }
-
-    .logo-image {
-        height: 32px !important;
-        width: auto !important;
-        max-width: 140px !important;
-    }
-
-    /* Hide desktop nav elements on mobile */
-    .nav-cta {
-        display: none !important;
-    }
-
-    /* Show hamburger - CRITICAL */
-    .mobile-menu-toggle {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 5px !important;
-        background: none !important;
-        border: none !important;
-        cursor: pointer !important;
-        padding: 10px !important;
-        z-index: 1002 !important;
-        position: relative !important;
-        order: 3 !important;
-    }
-
-    .mobile-menu-toggle span {
-        display: block !important;
-        width: 24px !important;
-        height: 2.5px !important;
-        background: var(--primary) !important;
-        border-radius: 2px !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    .mobile-menu-toggle.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px) !important;
-    }
-    
-    .mobile-menu-toggle.active span:nth-child(2) {
-        opacity: 0 !important;
-    }
-    
-    .mobile-menu-toggle.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px) !important;
-    }
-
-    /* Mobile Menu - Hidden by Default */
-    .nav-links {
-        position: fixed !important;
-        top: 56px !important;
-        left: 0 !important;
-        right: 0 !important;
         bottom: 0 !important;
-        width: 100% !important;
-        height: calc(100vh - 56px) !important;
-        background: rgba(255, 255, 255, 0.98) !important;
+        background: rgba(255,251,247,.98) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        backdrop-filter: blur(20px) !important;
         flex-direction: column !important;
-        padding: 1rem 0 !important;
-        margin: 0 !important;
-        gap: 0 !important;
-        list-style: none !important;
-        transform: translateX(100%) !important;
-        transition: transform 0.3s ease !important;
-        overflow-y: auto !important;
-        z-index: 1001 !important;
-        display: flex !important;
-    }
-
-    .nav-links.active {
-        transform: translateX(0) !important;
-    }
-
-    .nav-links li {
-        width: 100% !important;
-        border-bottom: 1px solid rgba(80, 140, 160, 0.1) !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    .nav-links a {
-        display: block !important;
-        padding: 1rem 1.5rem !important;
-        font-size: 1.1rem !important;
-        color: var(--text-primary) !important;
-        text-decoration: none !important;
-        border-radius: 0 !important;
-        background: transparent !important;
-    }
-
-    .nav-links a:hover,
-    .nav-links a:active {
-        background: rgba(80, 140, 160, 0.07) !important;
-        color: var(--brand-teal) !important;
-    }
-
-    /* Body overlay when menu open */
-    body.menu-open {
-        overflow: hidden !important;
-    }
-    
-    body.menu-open::before {
-        content: '';
-        position: fixed;
-        top: 56px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        pointer-events: none;
-    }
-
-    /* ============================================
-       HERO SECTION - MOBILE
-       ============================================ */
-    .hero {
-        padding: calc(56px + 2rem) 1rem 2.5rem 1rem !important;
-        min-height: 100px !important;
-    }
-
-    .hero-content {
-        text-align: center !important;
-        padding: 0 !important;
-    }
-
-    .hero-badge-top {
-        font-size: 0.75rem !important;
-        padding: 0.5rem 1rem !important;
-        margin-bottom: 1rem !important;
-        display: inline-block !important;
-    }
-
-    .hero h1 {
-        font-size: 1.75rem !important;
-        line-height: 1.25 !important;
-        margin-bottom: 0.75rem !important;
-    }
-
-    .hero-subtitle {
-        font-size: 0.95rem !important;
-        line-height: 1.4 !important;
-        margin-bottom: 0.75rem !important;
-    }
-
-    .hero-description {
-        font-size: 0.9rem !important;
-        line-height: 1.5 !important;
-        margin-bottom: 1.5rem !important;
-    }
-
-    .hero-buttons {
-        flex-direction: column !important;
-        gap: 0.75rem !important;
-        width: 100% !important;
-        display: flex !important;
-    }
-
-    .hero-buttons .btn {
-        width: 100% !important;
         justify-content: center !important;
-        padding: 0.875rem 1.25rem !important;
-        font-size: 0.95rem !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 80px 2rem 2rem !important;
+        z-index: 999 !important;
+        transform: translateX(100%) !important;
+        transition: transform 0.3s ease, opacity 0.3s ease !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
     }
+    .nav-links.active {
+        display: flex !important;
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    .nav-links a {
+        font-size: 1.2rem !important;
+        padding: 1rem 2rem !important;
+        width: 100% !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+    }
+    .nav-links a:hover, .nav-links a.active {
+        background: var(--pink-pale) !important;
+        color: var(--pink) !important;
+    }
+    .nav-cta { gap: 0.75rem !important }
+    .nav-cta .phone-link span { display: none !important }
+    .nav-cta .btn-primary { padding: 0.6rem 1.2rem !important; font-size: 0.85rem !important }
+    .mobile-menu-toggle { display: flex !important }
+    body.menu-open { overflow: hidden !important }
 
+    /* HERO */
+    .hero {
+        min-height: auto !important;
+        padding: 120px 0 60px !important;
+    }
+    .hero-balloons { display: none !important }
+    .hero-badge-top { font-size: 0.75rem !important; padding: 8px 16px !important; margin-bottom: 1.5rem !important }
+    .hero h1 { font-size: 2.2rem !important; margin-bottom: 1rem !important }
+    .hero-subtitle { font-size: 0.95rem !important; letter-spacing: 1px !important }
+    .hero-description { font-size: 1rem !important; margin-bottom: 2rem !important }
+    .hero-buttons { flex-direction: column !important; gap: 0.75rem !important; width: 100% !important }
+    .hero-buttons .btn { width: 100% !important; justify-content: center !important; padding: 14px 24px !important }
     .hero-trust {
         flex-direction: row !important;
         flex-wrap: wrap !important;
         justify-content: center !important;
-        gap: 0.75rem !important;
-        margin-top: 1.5rem !important;
-        display: flex !important;
-    }
-
-    .trust-item {
-        flex: 0 0 auto !important;
-        text-align: center !important;
-        min-width: 80px !important;
-    }
-
-    .trust-value {
-        font-size: 1.1rem !important;
-    }
-
-    .trust-label {
-        font-size: 0.7rem !important;
-    }
-
-    /* ============================================
-       SECTIONS - MOBILE SPACING
-       ============================================ */
-    section {
-        padding: 2rem 0 !important;
-    }
-
-    section h2 {
-        font-size: 1.4rem !important;
-        line-height: 1.25 !important;
-        margin-bottom: 0.75rem !important;
-    }
-
-    .section-intro {
-        font-size: 0.9rem !important;
-        line-height: 1.5 !important;
-        margin-bottom: 1.5rem !important;
-    }
-
-    /* ============================================
-       QUOTE/CONSULTATION FORM - MOBILE
-       ============================================ */
-    .quote-section {
-        padding: 2rem 0 !important;
-    }
-
-    .quote-wrapper {
-        display: flex !important;
-        flex-direction: column !important;
         gap: 1.5rem !important;
     }
-
-    .quote-intro {
-        text-align: center !important;
-    }
-
-    .quote-intro h2 {
-        font-size: 1.4rem !important;
-    }
-
-    .quote-intro p {
-        font-size: 0.9rem !important;
-    }
-
-    .quote-features {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0.75rem !important;
-        margin-top: 1rem !important;
-        align-items: stretch !important;
-        width: 100% !important;
-        padding: 0 !important;
-    }
-
-    .quote-feature {
-        font-size: 0.85rem !important;
-        justify-content: flex-start !important;
-        width: 100% !important;
-        text-align: left !important;
-        padding: 0.875rem 1.25rem !important;
-        box-sizing: border-box !important;
-    }
-    
-    .quote-feature svg {
-        flex-shrink: 0 !important;
-    }
-    
-    .quote-feature span {
-        text-align: left !important;
-    }
-
-    .quote-form-container {
-        padding: 0 !important;
-        width: 100% !important;
-    }
-
-    .quote-form {
-        padding: 1.25rem !important;
-    }
-
-    .form-row {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 1rem !important;
-    }
-
-    .form-group {
-        margin-bottom: 0 !important;
-        width: 100% !important;
-    }
-
-    .form-group label {
-        font-size: 0.85rem !important;
-        margin-bottom: 0.375rem !important;
-        display: block !important;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        width: 100% !important;
-        padding: 0.75rem !important;
-        font-size: 16px !important; /* Prevents iOS zoom */
-        min-height: 48px !important;
-    }
-
-    .form-group textarea {
-        min-height: 100px !important;
-    }
-
-    .quote-form .btn {
-        width: 100% !important;
-        margin-top: 0.5rem !important;
-    }
-
-    /* ============================================
-       SERVICE CARDS - MOBILE
-       ============================================ */
-    .service-grid,
-    .services-grid {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
-    }
-
-    .service-card {
-        padding: 1.25rem !important;
-    }
-
-    .service-icon {
-        width: 48px !important;
-        height: 48px !important;
-        margin-bottom: 0.75rem !important;
-    }
-
-    .service-icon svg {
-        width: 28px !important;
-        height: 28px !important;
-    }
-
-    .service-card h3 {
-        font-size: 1.1rem !important;
-        margin-bottom: 0.5rem !important;
-    }
-
-    .service-card p {
-        font-size: 0.875rem !important;
-        line-height: 1.5 !important;
-    }
-
-    /* ============================================
-       SERVICE AREAS / SUBURBS - MOBILE
-       ============================================ */
-    .suburbs-grid {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.5rem !important;
-    }
-
-    .suburb {
-        font-size: 0.8rem !important;
-        padding: 0.5rem !important;
-    }
-
-    .suburbs-footer {
-        margin-top: 1.5rem !important;
-    }
-
-    .suburbs-footer p {
-        font-size: 0.85rem !important;
-        line-height: 1.5 !important;
-    }
-
-    /* ============================================
-       PRICING SECTION - MOBILE
-       ============================================ */
-    .pricing {
-        padding: 2rem 0 !important;
-    }
-
-    .pricing-wrapper {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 1.25rem !important;
-    }
-
-    .pricing-card,
-    .requirements-card {
-        padding: 1.25rem !important;
-        width: 100% !important;
-    }
-
-    .pricing-card h3,
-    .requirements-card h3 {
-        font-size: 1.2rem !important;
-        margin-bottom: 0.75rem !important;
-    }
-
-    .price {
-        font-size: 1.75rem !important;
-    }
-
-    .price-subtitle {
-        font-size: 0.85rem !important;
-    }
-
-    .requirement-item {
-        padding: 0.75rem 0 !important;
-    }
-
-    .requirement-item strong {
-        font-size: 0.95rem !important;
-    }
-
-    .requirement-item p {
-        font-size: 0.85rem !important;
-    }
-
-    .note {
-        font-size: 0.85rem !important;
-        padding: 0.75rem !important;
-        margin-top: 1rem !important;
-    }
-
-    /* ============================================
-       FAQ SECTION - MOBILE
-       ============================================ */
-    .faqs {
-        padding: 2rem 0 !important;
-    }
-
-    .faq-list {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0.75rem !important;
-    }
-
-    .faq-item {
-        border-radius: 8px !important;
-    }
-
-    .faq-item summary,
-    .faq-question {
-        padding: 1rem !important;
-        font-size: 0.95rem !important;
-        line-height: 1.4 !important;
-    }
-
-    .faq-item p,
-    .faq-answer {
-        padding: 0 1rem 1rem 1rem !important;
-        font-size: 0.875rem !important;
-        line-height: 1.6 !important;
-    }
-
-    /* ============================================
-       TESTIMONIALS - MOBILE
-       ============================================ */
-    .testimonials {
-        padding: 2rem 0 !important;
-    }
-
-    .testimonials-header {
-        text-align: center !important;
-        margin-bottom: 1.5rem !important;
-    }
-
-    .testimonials-header .stars {
-        font-size: 1.25rem !important;
-        margin-bottom: 0.5rem !important;
-    }
-
-    .testimonials-header h2 {
-        font-size: 1.4rem !important;
-    }
-
-    .testimonials-header p {
-        font-size: 0.9rem !important;
-    }
-
-    .testimonials-grid {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
-    }
-
-    .testimonial-card {
-        padding: 1.25rem !important;
-    }
-
-    .testimonial-card .stars {
-        font-size: 0.9rem !important;
-        margin-bottom: 0.75rem !important;
-    }
-
-    .testimonial-card p {
-        font-size: 0.9rem !important;
-        line-height: 1.5 !important;
-        margin-bottom: 1rem !important;
-    }
-
-    .testimonial-author strong {
-        font-size: 0.95rem !important;
-    }
-
-    .testimonial-author span {
-        font-size: 0.8rem !important;
-    }
-
-    /* ============================================
-       CTA SECTIONS - MOBILE
-       ============================================ */
-    .cta-section {
-        padding: 2rem 1rem !important;
-        text-align: center !important;
-    }
-
-    .cta-section h2 {
-        font-size: 1.4rem !important;
-        margin-bottom: 0.75rem !important;
-    }
-
-    .cta-section .section-intro {
-        font-size: 0.9rem !important;
-        margin-bottom: 1.25rem !important;
-    }
-
-    .cta-buttons {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0.75rem !important;
-        width: 100% !important;
-    }
-
-    .cta-buttons .btn {
-        width: 100% !important;
-        justify-content: center !important;
-    }
-
-    /* ============================================
-       CONTACT SECTION - MOBILE
-       ============================================ */
-    .contact {
-        padding: 2rem 0 !important;
-    }
-
-    .contact-wrapper {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 1.5rem !important;
-    }
-
-    .contact-info,
-    .contact-cta {
-        padding: 1.25rem !important;
-        width: 100% !important;
-    }
-
-    .contact-info h3,
-    .contact-cta h3 {
-        font-size: 1.2rem !important;
-        margin-bottom: 1rem !important;
-    }
-
-    .info-item {
-        display: flex !important;
-        align-items: flex-start !important;
-        gap: 0.75rem !important;
-        margin-bottom: 1rem !important;
-    }
-
-    .info-icon {
-        font-size: 1.25rem !important;
-        flex-shrink: 0 !important;
-    }
-
-    .info-item strong {
-        font-size: 0.9rem !important;
-    }
-
-    .info-item p {
-        font-size: 0.875rem !important;
-        margin: 0.25rem 0 0 0 !important;
-    }
-
-    .business-hours {
-        margin-top: 1rem !important;
-    }
-
-    .business-hours strong {
-        font-size: 0.9rem !important;
-    }
-
-    .business-hours p {
-        font-size: 0.85rem !important;
-        margin: 0.25rem 0 !important;
-    }
-
-    .contact-cta p {
-        font-size: 0.9rem !important;
-        margin-bottom: 1rem !important;
-    }
-
-    .contact-cta-image {
-        margin-top: 1.25rem !important;
-        border-radius: 12px !important;
-        overflow: hidden !important;
-    }
-
-    .contact-cta-image img {
-        width: 100% !important;
-        height: auto !important;
-        max-height: 260px !important;
-        object-fit: cover !important;
-        object-position: center top !important;
-        border-radius: 12px !important;
-        display: block !important;
-    }
-
-    /* ============================================
-       FOOTER - MOBILE
-       ============================================ */
-    footer {
-        padding: 2.5rem 0 2rem 0 !important;
-    }
-
-    .footer-content {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 2rem !important;
-        text-align: center !important;
-    }
-
-    .footer-section {
-        margin-bottom: 0.5rem !important;
-        padding: 0 0.5rem !important;
-    }
-
-    .footer-logo {
-        height: 40px !important;
-        margin: 0 auto 1rem auto !important;
-    }
-
-    .footer-section h4 {
-        font-size: 1.1rem !important;
-        margin-bottom: 1rem !important;
-    }
-
-    .footer-section p {
-        font-size: 0.9rem !important;
-        line-height: 1.6 !important;
-        margin-bottom: 0.5rem !important;
-    }
-
-    .footer-section ul {
-        list-style: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    .footer-section ul li {
-        margin-bottom: 0.75rem !important;
-    }
-
-    .footer-section ul a {
-        font-size: 0.9rem !important;
-    }
-
-    .footer-bottom {
-        flex-direction: column !important;
-        gap: 1rem !important;
-        text-align: center !important;
-        padding: 1.5rem 1rem 0 1rem !important;
-        margin-top: 2rem !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-        width: 100% !important;
-    }
-
-    .footer-bottom p {
-        font-size: 0.85rem !important;
-        line-height: 1.6 !important;
-        margin-bottom: 0.5rem !important;
-    }
-
-    .disclaimer {
-        font-size: 0.8rem !important;
-        opacity: 0.7 !important;
-        line-height: 1.5 !important;
-        padding: 0 0.5rem !important;
-        margin-top: 0.5rem !important;
-    }
-
-    /* ============================================
-       CHAT WIDGET - MOBILE (APP-LIKE FULL VIEWPORT)
-       ============================================ */
-    .ai-chat-widget {
-        bottom: 20px !important;
-        right: 16px !important;
-        z-index: 10000 !important;
-    }
-
-    .chat-toggle {
-        width: 56px !important;
-        height: 56px !important;
-        box-shadow: 0 8px 24px rgba(148, 168, 154, 0.55), 0 4px 12px rgba(0,0,0,0.25) !important;
-    }
-
-    /* Backdrop overlay */
-    .chat-backdrop {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 9998;
-        animation: chatBackdropIn 0.3s ease;
-    }
-
-    .chat-backdrop.visible {
-        display: block;
-    }
-
-    @keyframes chatBackdropIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    /* Full-viewport chat window */
-    .chat-window {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 100vh !important; /* fallback */
-        height: 100svh !important;
-        max-height: none !important;
-        border-radius: 0 !important;
-        z-index: 9999 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        box-shadow: none !important;
-        border: none !important;
-        animation: chatSlideUpFull 0.38s cubic-bezier(0.32, 0.72, 0, 1) !important;
-    }
-
-    /* Keep hidden state intact — must come AFTER the rule above */
-    .chat-window.hidden {
-        display: none !important;
-    }
-
-    @keyframes chatSlideUpFull {
-        from {
-            opacity: 0;
-            transform: translateY(100%);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .chat-header {
-        flex-shrink: 0 !important;
-        padding: 1rem 1.25rem !important;
-        padding-top: max(env(safe-area-inset-top, 0px), 1rem) !important;
-        border-radius: 0 !important;
-        background: linear-gradient(160deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
-        box-shadow: 0 1px 0 rgba(255,255,255,0.08) !important;
-    }
-
-    .chat-header h3 {
-        font-size: 1.05rem !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.01em !important;
-    }
-
-    .chat-messages {
-        flex: 1 !important;
-        min-height: 0 !important;
-        padding: 1.25rem 1rem !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        overscroll-behavior: contain !important;
-        background: #f4f6f8 !important;
-    }
-
-    .chat-message {
-        max-width: 82% !important;
-        padding: 0.875rem 1rem !important;
-        font-size: 0.9375rem !important;
-        line-height: 1.55 !important;
-    }
-
-    .chat-form {
-        flex-shrink: 0 !important;
-        padding: 0.875rem 1rem !important;
-        padding-bottom: max(env(safe-area-inset-bottom, 0px), 0.875rem) !important;
-        background: white !important;
-        border-top: 1px solid rgba(0,0,0,0.08) !important;
-    }
-
-    .chat-form input {
-        font-size: 16px !important; /* Prevents iOS zoom */
-        padding: 0.875rem 1rem !important;
-        border-radius: 10px !important;
-    }
-
-    .chat-form button {
-        padding: 0.875rem 1.25rem !important;
-        font-size: 0.9rem !important;
-        border-radius: 10px !important;
-    }
-
-    .chat-suggestions {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0.5rem !important;
-        padding: 0.25rem 0 !important;
-    }
-
-    .suggestion-btn {
-        font-size: 0.875rem !important;
-        padding: 0.8rem 1rem !important;
-        border-radius: 10px !important;
-        border: 1.5px solid rgba(148, 168, 154, 0.3) !important;
-        color: #1e3a4a !important;
-        background: white !important;
-        text-align: left !important;
-        transition: background 0.18s ease, color 0.18s ease !important;
-        line-height: 1.45 !important;
-    }
-
-    .suggestion-btn:active {
-        background: var(--primary-dark) !important;
-        color: white !important;
-        border-color: var(--primary-dark) !important;
-    }
-
-    /* ============================================
-       BUTTONS - TOUCH OPTIMIZED
-       ============================================ */
-    .btn {
-        min-height: 48px !important;
-        padding: 0.875rem 1.25rem !important;
-        font-size: 0.9rem !important;
-        touch-action: manipulation !important;
-        -webkit-tap-highlight-color: transparent !important;
-    }
-
-    .btn-sm {
-        min-height: 40px !important;
-        padding: 0.625rem 1rem !important;
-        font-size: 0.85rem !important;
-    }
-
-    /* ============================================
-       UTILITY FIXES
-       ============================================ */
-    img {
-        max-width: 100% !important;
-        height: auto !important;
-    }
-
-    .hide-mobile {
-        display: none !important;
-    }
-
-    .show-mobile {
-        display: block !important;
-    }
-    
-    /* Fix any overflow issues */
-    section,
-    .container,
-    .quote-wrapper,
-    .pricing-wrapper,
-    .contact-wrapper,
-    .footer-content {
-        overflow-x: hidden !important;
-    }
+    .trust-item::after { display: none !important }
+    .trust-value { font-size: 1.4rem !important }
+    .trust-label { font-size: 0.75rem !important }
+
+
+
+    /* ABOUT */
+    .about-section { padding: 3rem 0 !important }
+    .about-grid { grid-template-columns: 1fr !important; gap: 2rem !important }
+    .about-content h2 { font-size: 1.8rem !important }
+    .about-content p { font-size: 1rem !important }
+    .about-features { grid-template-columns: 1fr !important; gap: 0.75rem !important }
+    .about-images { grid-template-columns: 1fr !important }
+    .about-images img { height: 200px !important }
+    .about-images img:nth-child(2) { margin-top: 0 !important }
+
+    /* GALLERY */
+    .premium-transformations { padding: 3rem 0 !important }
+    .transformations-header h2 { font-size: 1.8rem !important }
+    .transformations-grid { grid-template-columns: 1fr !important; gap: 1rem !important }
+    .transformation-card .case-details { padding: 1rem !important }
+
+    /* ASSESSMENT FORM */
+    .premium-assessment { padding: 3rem 0 !important; padding-top: 100px !important }
+    .assessment-container { padding: 1.5rem !important; border-radius: 16px !important }
+    .assessment-header h2 { font-size: 1.5rem !important }
+    .details-grid { grid-template-columns: 1fr !important }
+    .radio-group { flex-direction: column !important }
+    .radio-label { width: 100% !important; text-align: center !important }
+
+    /* HOW IT WORKS */
+    .how-it-works { padding: 3rem 0 !important }
+    .how-it-works h2 { font-size: 1.8rem !important }
+    .steps-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important }
+    .step-card { padding: 1.5rem !important }
+    .step-number { width: 48px !important; height: 48px !important; font-size: 1.3rem !important }
+    .when-you-need { padding: 1.5rem !important }
+    .when-you-need h3 { font-size: 1.3rem !important }
+
+    /* WHY CHOOSE US */
+    .services { padding: 3rem 0 !important }
+    .services h2 { font-size: 1.8rem !important }
+    .service-grid { grid-template-columns: 1fr !important; gap: 1rem !important }
+    .service-card { padding: 1.5rem !important }
+    .cta-buttons { flex-direction: column !important; gap: 0.75rem !important }
+    .cta-buttons .btn { width: 100% !important; justify-content: center !important }
+
+    /* BALLOON SKY SUBURBS */
+    .service-areas.balloon-sky { min-height: 420px !important }
+    .service-areas.balloon-sky h2 { font-size: 1.8rem !important; padding-top: 2.5rem !important }
+    .glass-map-wrapper { height: 220px !important; border-radius: 16px !important }
+    .suburbs-footer { padding: 1.5rem !important; margin-top: 1rem !important }
+    .suburbs-footer p { font-size: 0.95rem !important }
+
+    /* TESTIMONIALS CAROUSEL */
+    .testimonials { padding: 3rem 0 !important }
+    .testimonials-header h2 { font-size: 1.8rem !important }
+    .review-card { padding: 1.25rem !important }
+    .review-text { font-size: 0.88rem !important; line-height: 1.7 !important }
+    .google-rating-badge { padding: 10px 18px !important; gap: 8px !important }
+    .google-rating-badge .rating-number { font-size: 1.4rem !important }
+    .reviews-swiper::before, .reviews-swiper::after { width: 40px !important }
+    .reviews-nav-row { margin-top: 0.75rem !important }
+    .reviews-nav-btn { width: 40px !important; height: 40px !important }
+
+    /* QUOTE FORM */
+    .quote-section { padding: 3rem 0 !important }
+    .quote-wrapper { grid-template-columns: 1fr !important; gap: 2rem !important }
+    .quote-intro h2 { font-size: 1.8rem !important }
+    .quote-form-container { padding: 1.5rem !important }
+    .form-row { grid-template-columns: 1fr !important }
+
+    /* CTA */
+    .cta-section { padding: 3rem 0 !important }
+    .cta-section h2 { font-size: 1.8rem !important }
+
+    /* PRICING */
+    .pricing { padding: 3rem 0 !important }
+    .pricing h2 { font-size: 1.8rem !important }
+    .pricing-wrapper { grid-template-columns: 1fr !important; gap: 1.5rem !important }
+
+    /* FAQS */
+    .faqs { padding: 3rem 0 !important }
+    .faqs h2 { font-size: 1.8rem !important }
+    .faq-item summary { font-size: 0.95rem !important; padding: 1rem !important }
+    .faq-item > p { padding: 0 1rem 1rem !important; font-size: 0.9rem !important }
+
+    /* CONTACT */
+    .contact { padding: 3rem 0 !important }
+    .contact h2 { font-size: 1.8rem !important }
+    .contact-wrapper { grid-template-columns: 1fr !important; gap: 2rem !important }
+    .contact-cta { padding: 1.5rem !important; padding-bottom: 0 !important }
+    .contact-cta h3 { font-size: 1.5rem !important }
+    .contact-cta .cta-buttons { flex-direction: column !important }
+    .contact-cta .btn { width: 100% !important; justify-content: center !important }
+    .cta-gallery-frame { margin-left: -1.5rem !important; margin-right: -1.5rem !important; margin-top: 1.5rem !important }
+
+    /* FOOTER */
+    footer { padding: 2rem 0 1rem !important }
+    .footer-content { flex-direction: column !important; gap: 2rem !important }
+    .footer-logo { height: 90px !important; max-width: 260px !important }
+    .footer-bottom { text-align: center !important }
+
+    /* CHAT WIDGET */
+    .ai-chat-widget { bottom: 1rem !important; right: 1rem !important }
+    .chat-toggle { width: 52px !important; height: 52px !important }
+    .chat-window { width: calc(100vw - 32px) !important; right: 0 !important; bottom: 70px !important; max-height: 70vh !important; border-radius: 16px !important }
+    .chat-header { padding: 14px 16px !important }
+    .chat-header h3 { font-size: 1rem !important }
+    .chat-messages { padding: 12px !important }
+    .chat-message { padding: 12px 14px !important; font-size: 0.9rem !important }
+    .chat-form { padding: 12px !important; gap: 8px !important }
+    .chat-form input { padding: 10px 12px !important; font-size: 0.9rem !important }
+    .chat-form button { padding: 10px 16px !important; font-size: 0.85rem !important }
 }
 
-/* Small phones */
-@media (max-width: 374px) {
-    .hero h1 {
-        font-size: 1.5rem !important;
-    }
-
-    section h2 {
-        font-size: 1.25rem !important;
-    }
-
-    .suburbs-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    .trust-item {
-        min-width: 70px !important;
-    }
-
-    .trust-value {
-        font-size: 1rem !important;
-    }
-
-    .trust-label {
-        font-size: 0.65rem !important;
-    }
-    
-    .container {
-        padding: 0 0.75rem !important;
-    }
+/* TABLET ADJUSTMENTS */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container { padding: 0 1.5rem !important }
+    .hero h1 { font-size: 3rem !important }
+    .about-grid { grid-template-columns: 1fr !important }
+    .service-grid { grid-template-columns: repeat(2, 1fr) !important }
+    .steps-grid { grid-template-columns: repeat(2, 1fr) !important }
+    .transformations-grid { grid-template-columns: repeat(2, 1fr) !important }
+    .review-slide { min-width: auto !important }
+    .quote-wrapper { grid-template-columns: 1fr !important }
+    .contact-wrapper { grid-template-columns: 1fr !important }
+    .pricing-wrapper { grid-template-columns: repeat(2, 1fr) !important }
+    .nav-links a { font-size: 0.8rem !important; padding: 0.5rem 0.75rem !important }
 }
 
-/* Landscape mode */
-@media (max-width: 768px) and (orientation: landscape) {
-    .hero {
-        padding: calc(56px + 1.5rem) 1rem 1.5rem 1rem !important;
-    }
+/* SMALL PHONES */
+@media (max-width: 380px) {
+    .hero h1 { font-size: 1.8rem !important }
+    .hero-badge-top { font-size: 0.7rem !important; padding: 6px 12px !important }
+    .trust-value { font-size: 1.2rem !important }
 
-    .chat-window {
-        height: 100svh !important;
-        height: 100vh !important;
-    }
-
-    section {
-        padding: 1.5rem 0 !important;
-    }
+    .section-label { font-size: 0.7rem !important; padding: 6px 14px !important }
 }

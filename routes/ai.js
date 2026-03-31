@@ -1,8 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 const pool = require('../db/pool');
 const mailgun = require('mailgun-js');
+
+// Load system prompt from file (avoids multi-line env var issues in Coolify)
+const SYSTEM_PROMPT = (() => {
+    try {
+        return fs.readFileSync(path.join(__dirname, '..', 'prompts', 'system-prompt.txt'), 'utf8').trim();
+    } catch (err) {
+        console.warn('Could not load prompts/system-prompt.txt, falling back to env var:', err.message);
+        return process.env.OPENROUTER_SYSTEM_PROMPT || 'You are a helpful AI assistant.';
+    }
+})();
 
 // Initialize Mailgun
 const mg = mailgun({
@@ -36,7 +48,7 @@ const tools = [
         type: 'function',
         function: {
             name: 'request_callback',
-            description: 'Schedule a callback for the user when they want to speak with the Websited team, get pricing details, schedule a consultation, or discuss their business needs in detail. Collect name and at least one contact method (phone or email) before calling this function.',
+            description: 'Schedule a callback for the user when they want to speak with the Ballooncini team, get a quote, schedule a consultation, or discuss their event needs in detail. Collect name and at least one contact method (phone or email) before calling this function.',
             parameters: {
                 type: 'object',
                 properties: {
@@ -230,7 +242,7 @@ async function executeFetchWebpage(url, sessionId) {
             timeout: 15000,
             maxRedirects: 5,
             headers: {
-                'User-Agent': 'Websited-AI-Bot/1.0 (https://websited.au)',
+                'User-Agent': 'Ballooncini-AI-Bot/1.0 (https://ballooncini.com.au)',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 'Accept-Language': 'en-US,en;q=0.9'
             }
@@ -402,7 +414,7 @@ async function sendCallbackEmails(data) {
             from: process.env.EMAIL_FROM,
             to: recipient,
             bcc: process.env.EMAIL_BCC,
-            subject: '🔥 URGENT: New Callback Request - Websited',
+            subject: '🔥 URGENT: New Callback Request - Ballooncini',
             html: `
                 <!DOCTYPE html>
                 <html>
@@ -470,14 +482,14 @@ async function sendCallbackEmails(data) {
                             
                             <div class="footer">
                                 <p>Received: ${new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' })} AEDT</p>
-                                <p style="margin: 0;">Websited - AI & Digital Marketing Solutions</p>
+                                <p style="margin: 0;">Ballooncini - Balloon Decorations & Event Styling</p>
                             </div>
                         </div>
                     </div>
                 </body>
                 </html>
             `,
-            text: `NEW CALLBACK REQUEST\n\nName: ${data.name}\nPhone: ${data.phone || 'N/A'}\nEmail: ${data.email || 'N/A'}\nPreferred Contact: ${data.preferred_contact_method || 'any'}\nPreferred Time: ${data.preferred_time || 'ASAP'}\nReference: ${data.referenceId}\n\n${data.message ? `Message: ${data.message}\n\n` : ''}View in dashboard: ${process.env.SITE_URL}/admin/callbacks.html?id=${data.id}`
+            text: `NEW CALLBACK REQUEST\n\nName: ${data.name}\nPhone: ${data.phone || 'N/A'}\nEmail: ${data.email || 'N/A'}\nPreferred Contact: ${data.preferred_contact_method || 'any'}\nPreferred Time: ${data.preferred_time || 'ASAP'}\nReference: ${data.referenceId}\n\n${data.message ? `Message: ${data.message}\n\n` : ''}View in dashboard: ${process.env.SITE_URL}/admin/callbacks.html?id=${data.id}\n\nBallooncini - Balloon Decorations & Event Styling`
         };
 
         await mg.messages().send(adminEmailData);
@@ -489,7 +501,7 @@ async function sendCallbackEmails(data) {
                 from: process.env.EMAIL_FROM,
                 to: data.email,
                 'h:Reply-To': process.env.EMAIL_FROM,
-                subject: 'We\'ve received your request - Websited',
+                subject: 'We\'ve received your request - Ballooncini',
                 html: `
                     <!DOCTYPE html>
                     <html>
@@ -512,7 +524,7 @@ async function sendCallbackEmails(data) {
                                 <p style="margin: 15px 0 0 0; font-size: 18px; opacity: 0.95;">We've received your callback request</p>
                             </div>
                             <div class="content">
-                                <p style="font-size: 16px; margin-top: 0;">Our team at Websited is excited to connect with you and discuss how we can help grow your business with AI-powered marketing solutions.</p>
+                                <p style="font-size: 16px; margin-top: 0;">Our team at Ballooncini is excited to connect with you and discuss how we can make your event truly unforgettable with stunning balloon decorations.</p>
                                 
                                 <div class="reference-box">
                                     <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Your Reference Number</p>
@@ -523,33 +535,33 @@ async function sendCallbackEmails(data) {
                                 <ul style="padding-left: 20px;">
                                     <li style="margin: 12px 0;">Our team will review your request immediately</li>
                                     <li style="margin: 12px 0;">You'll hear from us <strong>within 24 hours</strong> via ${data.preferred_contact_method === 'phone' ? 'phone call' : data.preferred_contact_method === 'email' ? 'email' : data.preferred_contact_method === 'sms' ? 'SMS' : 'your preferred method'}</li>
-                                    <li style="margin: 12px 0;">We'll discuss your specific business needs and goals</li>
-                                    <li style="margin: 12px 0;">You'll receive a customized strategy recommendation</li>
+                                    <li style="margin: 12px 0;">We'll discuss your event vision and decoration needs</li>
+                                    <li style="margin: 12px 0;">You'll receive a customised quote for your event</li>
                                 </ul>
                                 
                                 <p style="background: #f9fafb; padding: 20px; border-left: 4px solid #C4EF17; margin: 30px 0;">
                                     <strong>Want to get started faster?</strong><br>
-                                    Book a time directly in our calendar:
+                                    Give us a call:
                                 </p>
                                 
                                 <center>
-                                    <a href="https://calendly.com/websited" class="cta-button">
-                                        �� Book a Time Now
+                                    <a href="tel:0297167600" class="cta-button">
+                                        📞 Call Us Now
                                     </a>
                                 </center>
                                 
                                 <div class="footer">
-                                    <p style="margin: 0 0 10px 0;"><strong>Websited</strong></p>
-                                    <p style="margin: 0 0 5px 0;">2 Martin Place, Sydney, Australia</p>
-                                    <p style="margin: 0 0 5px 0;">📧 hello@websited.org | 🌐 websited.org</p>
-                                    <p style="margin: 20px 0 0 0; font-size: 12px;">25+ years dominating digital marketing with AI-powered solutions</p>
+                                    <p style="margin: 0 0 10px 0;"><strong>Ballooncini</strong></p>
+                                    <p style="margin: 0 0 5px 0;">169 Ramsay St, Haberfield NSW 2045</p>
+                                    <p style="margin: 0 0 5px 0;">📧 info@ballooncini.com.au | 📞 (02) 9716 7600</p>
+                                    <p style="margin: 20px 0 0 0; font-size: 12px;">Since 1997 — Sydney's favourite balloon decoration specialists</p>
                                 </div>
                             </div>
                         </div>
                     </body>
                     </html>
                 `,
-                text: `Thank you, ${data.name}!\n\nWe've received your callback request.\n\nYour Reference Number: ${data.referenceId}\n\nWhat happens next?\n- Our team will review your request immediately\n- You'll hear from us within 24 hours via ${data.preferred_contact_method || 'your preferred method'}\n- We'll discuss your specific business needs and goals\n\nWant to get started faster? Book a time: https://calendly.com/websited\n\nWebsited - AI & Digital Marketing Solutions\n2 Martin Place, Sydney, Australia\nhello@websited.org | websited.org`
+                text: `Thank you, ${data.name}!\n\nWe've received your callback request.\n\nYour Reference Number: ${data.referenceId}\n\nWhat happens next?\n- Our team will review your request immediately\n- You'll hear from us within 24 hours via ${data.preferred_contact_method || 'your preferred method'}\n- We'll discuss your event vision and decoration needs\n\nWant to get started faster? Call us: (02) 9716 7600\n\nBallooncini - Balloon Decorations & Event Styling\n169 Ramsay St, Haberfield NSW 2045\ninfo@ballooncini.com.au | ballooncini.com.au`
             };
 
             await mg.messages().send(customerEmailData);
@@ -621,7 +633,7 @@ router.post('/chat', async (req, res) => {
         const messages = [
             {
                 role: 'system',
-                content: process.env.OPENROUTER_SYSTEM_PROMPT || 'You are a helpful AI assistant.'
+                content: SYSTEM_PROMPT
             }
         ];
 
@@ -1117,7 +1129,7 @@ router.post('/chat/email-transcript', async (req, res) => {
             const isUser = msg.role === 'user';
             const backgroundColor = isUser ? '#f3f4f6' : '#e0f2fe';
             const alignment = isUser ? 'right' : 'left';
-            const label = isUser ? 'You' : 'Websited AI';
+            const label = isUser ? 'You' : 'Ballooncini AI';
             const labelColor = isUser ? '#6b7280' : '#0369a1';
             
             return `
@@ -1143,7 +1155,7 @@ router.post('/chat/email-transcript', async (req, res) => {
             from: process.env.EMAIL_FROM,
             to: email,
             'h:Reply-To': process.env.EMAIL_FROM,
-            subject: `Your Websited Chat Transcript - ${currentDate}`,
+            subject: `Your Ballooncini Chat Transcript - ${currentDate}`,
             html: `
                 <!DOCTYPE html>
                 <html>
@@ -1168,7 +1180,7 @@ router.post('/chat/email-transcript', async (req, res) => {
                         </div>
                         <div class="content">
                             <p style="font-size: 16px; margin-top: 0;">Hi there! 👋</p>
-                            <p style="font-size: 16px;">Here's a copy of your conversation with our Websited AI assistant. We've saved this for your records and our team has been notified of your interest.</p>
+                            <p style="font-size: 16px;">Here's a copy of your conversation with our Ballooncini AI assistant. We've saved this for your records and our team has been notified of your interest.</p>
                             
                             <div class="transcript-container">
                                 <h2 style="margin-top: 0; color: #1a1a2e; font-size: 20px;">Your Conversation</h2>
@@ -1177,9 +1189,9 @@ router.post('/chat/email-transcript', async (req, res) => {
                             
                             <div class="cta-box">
                                 <h3 style="margin: 0 0 15px 0; color: #0f0f23; font-size: 24px;">Ready to Take the Next Step?</h3>
-                                <p style="margin: 0 0 20px 0; color: #1a1a2e; font-size: 16px;">Let's discuss how we can help grow your business with AI-powered marketing.</p>
+                                <p style="margin: 0 0 20px 0; color: #1a1a2e; font-size: 16px;">Let's discuss how we can make your event unforgettable with stunning balloon decorations.</p>
                                 <a href="${process.env.SITE_URL}/contact/" class="cta-button">
-                                    📞 Schedule a Free Consultation
+                                    📞 Get a Free Quote
                                 </a>
                             </div>
                             
@@ -1188,12 +1200,12 @@ router.post('/chat/email-transcript', async (req, res) => {
                             </p>
                             
                             <div class="footer">
-                                <p style="margin: 0 0 15px 0;"><strong style="color: #1a1a2e; font-size: 18px;">Websited</strong></p>
-                                <p style="margin: 0 0 8px 0;">AI & Digital Marketing Solutions</p>
-                                <p style="margin: 0 0 8px 0;">2 Martin Place, Sydney, NSW 2000, Australia</p>
+                                <p style="margin: 0 0 15px 0;"><strong style="color: #1a1a2e; font-size: 18px;">Ballooncini</strong></p>
+                                <p style="margin: 0 0 8px 0;">Balloon Decorations & Event Styling</p>
+                                <p style="margin: 0 0 8px 0;">169 Ramsay St, Haberfield NSW 2045</p>
                                 <p style="margin: 0 0 15px 0;">
-                                    📧 <a href="mailto:hello@websited.org" style="color: #1E40AF; text-decoration: none;">hello@websited.org</a> | 
-                                    🌐 <a href="${process.env.SITE_URL}" style="color: #1E40AF; text-decoration: none;">websited.org</a>
+                                    📧 <a href="mailto:info@ballooncini.com.au" style="color: #1E40AF; text-decoration: none;">info@ballooncini.com.au</a> | 
+                                    🌐 <a href="${process.env.SITE_URL}" style="color: #1E40AF; text-decoration: none;">ballooncini.com.au</a>
                                 </p>
                                 <p style="margin: 20px 0 0 0; font-size: 12px; color: #9ca3af;">
                                     Reference ID: ${referenceId}<br>
@@ -1205,7 +1217,7 @@ router.post('/chat/email-transcript', async (req, res) => {
                 </body>
                 </html>
             `,
-            text: `Your Websited Chat Transcript - ${currentDate}\n\n${transcript.map(msg => `${msg.role === 'user' ? 'You' : 'Websited AI'}: ${msg.content}`).join('\n\n')}\n\nReady to take the next step?\n\nLet's discuss how we can help grow your business with AI-powered marketing.\nSchedule a free consultation: ${process.env.SITE_URL}/contact/\n\nWebsited - AI & Digital Marketing Solutions\n2 Martin Place, Sydney, Australia\nhello@websited.org | ${process.env.SITE_URL}\n\nReference ID: ${referenceId}`
+            text: `Your Ballooncini Chat Transcript - ${currentDate}\n\n${transcript.map(msg => `${msg.role === 'user' ? 'You' : 'Ballooncini AI'}: ${msg.content}`).join('\n\n')}\n\nReady to take the next step?\n\nLet's discuss how we can make your event unforgettable with stunning balloon decorations.\nGet a free quote: ${process.env.SITE_URL}/contact/\n\nBallooncini - Balloon Decorations & Event Styling\n169 Ramsay St, Haberfield NSW 2045\ninfo@ballooncini.com.au | ${process.env.SITE_URL}\n\nReference ID: ${referenceId}`
         };
 
         await mg.messages().send(customerEmailData);
@@ -1217,7 +1229,7 @@ router.post('/chat/email-transcript', async (req, res) => {
             from: process.env.EMAIL_FROM,
             to: recipient,
             bcc: process.env.EMAIL_BCC,
-            subject: '💬 New Chat Transcript Download Request - Websited',
+            subject: '💬 New Chat Transcript Download Request - Ballooncini',
             html: `
                 <!DOCTYPE html>
                 <html>

@@ -87,12 +87,12 @@ router.post('/send-email', async (req, res) => {
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1 style="margin: 0; font-size: 24px;">🦷 New Patient Enquiry</h1>
-                        <p style="margin: 5px 0 0; opacity: 0.9;">Elite Dentistry Neutral Bay</p>
+                        <h1 style="margin: 0; font-size: 24px;">🎈 New Event Enquiry</h1>
+                        <p style="margin: 5px 0 0; opacity: 0.9;">Ballooncini Haberfield</p>
                     </div>
                     <div class="content">
                         <div class="field">
-                            <div class="label">Patient Name</div>
+                            <div class="label">Client Name</div>
                             <div class="value">${name}</div>
                         </div>
                         <div class="field">
@@ -120,8 +120,8 @@ router.post('/send-email', async (req, res) => {
                         ` : ''}
                     </div>
                     <div class="footer">
-                        <p>This enquiry was received via the Elite Dentistry website.</p>
-                        <p>© ${new Date().getFullYear()} Elite Dentistry. All rights reserved.</p>
+                        <p>This enquiry was received via the Ballooncini website.</p>
+                        <p>© ${new Date().getFullYear()} Ballooncini. All rights reserved.</p>
                     </div>
                 </div>
             </body>
@@ -169,7 +169,7 @@ router.post('/send-email', async (req, res) => {
 
         // Plain text version
         const textContent = `
-New Patient Enquiry - Elite Dentistry
+New Event Enquiry - Ballooncini
 
 Name: ${name}
 Email: ${email}
@@ -181,11 +181,11 @@ Message:
 ${message || 'No additional notes provided.'}
 
 ----------------------------------------
-Received via Elite Dentistry Website
+Received via Ballooncini Website
         `;
 
         const data = {
-            from: 'Elite Dentistry <noreply@' + process.env.MAILGUN_DOMAIN + '>',
+            from: 'Ballooncini <noreply@' + process.env.MAILGUN_DOMAIN + '>',
             to: process.env.EMAIL_TO,
             bcc: process.env.EMAIL_BCC,
             subject: `New Enquiry: ${name} - ${service || 'General'}`,
@@ -248,7 +248,7 @@ router.post('/submit-assessment', (req, res, next) => {
         }
 
         const name = `${firstName} ${lastName}`;
-        const service = 'Invisalign Assessment';
+        const service = 'Event Enquiry';
         
         let photoInfo = 'No photos uploaded.';
         let photoLinks = [];
@@ -260,17 +260,16 @@ router.post('/submit-assessment', (req, res, next) => {
 
         // Format details for DB message field
         const assessmentDetails = `
-ASSESSMENT RESULTS
+ENQUIRY DETAILS
 ------------------
-• Patient Group: ${ageGroup}
-• Status: ${status}
-• Primary Concern: ${concern}
-• Bite Issue: ${biteType}
-• DOB: ${dob}
-• Postcode: ${postcode}
+• Event Type: ${ageGroup}
+• Timeline: ${status}
+• Service Interest: ${concern}
+• Event Date: ${dob}
+• Event Location: ${postcode}
 • Photos: ${photoInfo}
 
-(Submitted via Premium Online Assessment)
+(Submitted via Online Event Enquiry Form)
 `.trim();
 
         // 1. Save to Database
@@ -333,19 +332,19 @@ ASSESSMENT RESULTS
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>New Assessment Received</h1>
-                        <div class="subtitle">Elite Dentistry - Premium Invisalign Lead</div>
+                        <h1>New Event Enquiry Received</h1>
+                        <div class="subtitle">Ballooncini - Event Decoration Lead</div>
                     </div>
                     <div class="content">
                         <div class="section">
-                            <div class="section-title">Patient Details</div>
+                            <div class="section-title">Client Details</div>
                             <div class="grid">
                                 <div class="field">
                                     <div class="label">Full Name</div>
                                     <div class="value">${name}</div>
                                 </div>
                                 <div class="field">
-                                    <div class="label">DOB</div>
+                                    <div class="label">Event Date</div>
                                     <div class="value">${dob}</div>
                                 </div>
                                 <div class="field">
@@ -364,33 +363,29 @@ ASSESSMENT RESULTS
                         </div>
 
                         <div class="section">
-                            <div class="section-title">Assessment Answers</div>
+                            <div class="section-title">Event Details</div>
                             <div class="field">
-                                <div class="label">Patient Group</div>
+                                <div class="label">Event Type</div>
                                 <div class="value">${ageGroup}</div>
                             </div>
                             <div class="field">
-                                <div class="label">Current Status</div>
+                                <div class="label">Timeline</div>
                                 <div class="value">${status}</div>
                             </div>
                             <div class="field">
-                                <div class="label">Primary Concern</div>
+                                <div class="label">Service Interest</div>
                                 <div class="value">${concern}</div>
-                            </div>
-                            <div class="highlight-box">
-                                <div class="label" style="color: #1e3a8a;">Selected Bite Issue</div>
-                                <div class="value" style="font-size: 18px;">${biteType}</div>
                             </div>
                             ${photos.length > 0 ? `
                             <div class="photo-preview">
-                                📸 <strong>${photos.length} Smile Photo(s) Included</strong><br>
+                                📸 <strong>${photos.length} Inspiration Photo(s) Included</strong><br>
                                 See attachments.
                             </div>
                             ` : ''}
                         </div>
                     </div>
                     <div class="footer">
-                        <p>ID: #${dbId || 'Pending'} • Received via Online Assessment</p>
+                        <p>ID: #${dbId || 'Pending'} • Received via Online Event Enquiry</p>
                     </div>
                 </div>
             </body>
@@ -398,10 +393,10 @@ ASSESSMENT RESULTS
         `;
 
         const data = {
-            from: 'Elite Dentistry <noreply@' + process.env.MAILGUN_DOMAIN + '>',
+            from: 'Ballooncini <noreply@' + process.env.MAILGUN_DOMAIN + '>',
             to: process.env.EMAIL_TO,
             bcc: process.env.EMAIL_BCC,
-            subject: `New Assessment: ${name} - ${biteType} ${photos.length > 0 ? '📷' : ''}`,
+            subject: `New Event Enquiry: ${name} - ${ageGroup} ${photos.length > 0 ? '📷' : ''}`,
 
             text: assessmentDetails,
             html: emailHtml,
