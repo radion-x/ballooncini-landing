@@ -3,35 +3,14 @@
  * Handles general website functionality
  */
 
-// Mobile Menu Toggle with Dropdown Support
+// Mobile Menu — Premium dark panel sliding from right
 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-const navLinks = document.querySelector('.nav-links');
+const mobMenu = document.getElementById('mobMenu');
+const mobBackdrop = document.getElementById('mobBackdrop');
+const mobClose = document.getElementById('mobClose');
 const MOBILE_BREAKPOINT = 768;
 
 const isMobileView = () => window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
-
-const setMenuState = (isActive) => {
-    if (!navLinks) return;
-    if (!isMobileView()) {
-        navLinks.style.transform = '';
-        navLinks.style.opacity = '';
-        navLinks.style.visibility = '';
-        navLinks.style.pointerEvents = '';
-        return;
-    }
-    // Let CSS handle transitions — only set inline styles when explicitly toggling
-    if (isActive) {
-        navLinks.style.transform = 'translateY(0)';
-        navLinks.style.opacity = '1';
-        navLinks.style.visibility = 'visible';
-        navLinks.style.pointerEvents = 'auto';
-    } else {
-        navLinks.style.transform = '';
-        navLinks.style.opacity = '';
-        navLinks.style.visibility = '';
-        navLinks.style.pointerEvents = '';
-    }
-};
 
 const setHamburgerState = (isActive) => {
     if (!mobileMenuToggle) return;
@@ -47,89 +26,51 @@ const setHamburgerState = (isActive) => {
     }
 };
 
-if (mobileMenuToggle && navLinks) {
-    setMenuState(false);
-    
-    // Toggle mobile menu
+const openMobMenu = () => {
+    if (!mobMenu) return;
+    mobMenu.classList.add('active');
+    mobMenu.setAttribute('aria-hidden', 'false');
+    if (mobBackdrop) mobBackdrop.classList.add('active');
+    document.body.classList.add('menu-open');
+    mobileMenuToggle && mobileMenuToggle.classList.add('active');
+    setHamburgerState(true);
+};
+
+const closeMobMenu = () => {
+    if (!mobMenu) return;
+    mobMenu.classList.remove('active');
+    mobMenu.setAttribute('aria-hidden', 'true');
+    if (mobBackdrop) mobBackdrop.classList.remove('active');
+    document.body.classList.remove('menu-open');
+    mobileMenuToggle && mobileMenuToggle.classList.remove('active');
+    setHamburgerState(false);
+};
+
+if (mobileMenuToggle) {
     mobileMenuToggle.addEventListener('click', (e) => {
         if (!isMobileView()) return;
         e.stopPropagation();
-        mobileMenuToggle.classList.toggle('active');
-        navLinks.classList.toggle('active');
-        document.body.classList.toggle('menu-open');
-        const isActive = navLinks.classList.contains('active');
-        setMenuState(isActive);
-        setHamburgerState(isActive);
-    });
-
-    // Handle mobile dropdown toggles
-    const mobileDropdowns = document.querySelectorAll('.nav-item-dropdown');
-    mobileDropdowns.forEach(dropdown => {
-        const dropdownLink = dropdown.querySelector('a[href*="service"]');
-        if (dropdownLink) {
-            dropdownLink.addEventListener('click', (e) => {
-                // On mobile, toggle dropdown instead of navigating
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    dropdown.classList.toggle('active');
-                    
-                    // Close other dropdowns
-                    mobileDropdowns.forEach(other => {
-                        if (other !== dropdown) {
-                            other.classList.remove('active');
-                        }
-                    });
-                }
-            });
-        }
-    });
-
-    // Close menu when clicking a non-dropdown link
-    document.querySelectorAll('.nav-links a:not(.nav-item-dropdown > a)').forEach(link => {
-        link.addEventListener('click', () => {
-            if (!isMobileView()) return;
-            mobileMenuToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            setMenuState(false);
-            setHamburgerState(false);
-            
-            // Close all dropdowns
-            mobileDropdowns.forEach(dropdown => {
-                dropdown.classList.remove('active');
-            });
-        });
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!isMobileView()) return;
-        if (navLinks.classList.contains('active') && 
-            !e.target.closest('.nav-links') && 
-            !e.target.closest('.mobile-menu-toggle')) {
-            mobileMenuToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            setMenuState(false);
-            setHamburgerState(false);
-            
-            // Close all dropdowns
-            mobileDropdowns.forEach(dropdown => {
-                dropdown.classList.remove('active');
-            });
-        }
-    });
-    window.addEventListener('resize', () => {
-        const isActive = mobileMenuToggle.classList.contains('active');
-        if (!isMobileView()) {
-            mobileMenuToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.classList.remove('menu-open');
-        }
-        setMenuState(isMobileView() && isActive);
-        setHamburgerState(isMobileView() && isActive);
+        mobMenu && mobMenu.classList.contains('active') ? closeMobMenu() : openMobMenu();
     });
 }
+
+if (mobClose) mobClose.addEventListener('click', closeMobMenu);
+if (mobBackdrop) mobBackdrop.addEventListener('click', closeMobMenu);
+
+// Close on any mob-nav link or CTA click
+if (mobMenu) {
+    mobMenu.querySelectorAll('.mob-nav-item, .mob-cta').forEach(link => {
+        link.addEventListener('click', closeMobMenu);
+    });
+}
+
+// Close on resize to desktop
+window.addEventListener('resize', () => {
+    if (!isMobileView() && mobMenu && mobMenu.classList.contains('active')) {
+        closeMobMenu();
+    }
+});
+
 
 // Make logo clickable to scroll to top
 const logo = document.querySelector('.logo');
